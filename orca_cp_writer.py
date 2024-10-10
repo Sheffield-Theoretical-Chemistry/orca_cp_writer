@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """orca_cp_writer.py: Produces an Orca CP correction input file from an xyz"""
 
 import argparse
@@ -10,6 +10,7 @@ def orca_cp_write(args):
     readfile = args.xyz_file
     outfile = args.orca_input_file
     split_atom_no = args.split_atom_no
+    memory = args.ram
     
     method_keywords = "! " + args.method_keywords + "\n"
     print("Using the method keywords:", method_keywords)
@@ -18,6 +19,7 @@ def orca_cp_write(args):
     dispersion = any(ele in method_keywords for ele in disp_list)
     if dispersion:
         print("Empirical dispersion correction detected.")
+    memory_string = "%maxcore " + memory + "\n"
     
     #Offset the split by the two compulsory lines in an xyz file
     splitter = int(split_atom_no) + 2
@@ -54,7 +56,7 @@ def orca_cp_write(args):
 
     inp=open(outfile,'w+')
     
-    inp.write("%maxcore 4000\n")
+    inp.write(memory_string)
     inp.write("* xyz 0 1\n")
     inp.write(dimer)
     inp.write("*\n\n")
@@ -135,12 +137,18 @@ if __name__ == "__main__":
     )
     parser.add_argument("xyz_file", help="The XYZ file to be processed")
     parser.add_argument("orca_input_file", help="The name of the input file to be created")
-    parser.add_argument("split_atom_no", help="Number of the atom within the xyz file where the second monomer block starts")
+    parser.add_argument("split_atom_no", help="Number of the atom within the xyz file where the first monomer block ends")
     parser.add_argument(
          "-m",
          "--method_keywords",
          help="string that contains the method and basis sets keywords for Orca, default is 'M062X D3ZERO def2-TZVPD TIGHTSCF defgrid3'",
          default="M062X D3ZERO def2-TZVPD TIGHTSCF defgrid3",
+    )
+    parser.add_argument(
+         "-r",
+         "--ram",
+         help="Amount of memory (maxcore), in MB, to be requested, default is 4000'",
+         default="4000",
     )
 
     args = parser.parse_args()
