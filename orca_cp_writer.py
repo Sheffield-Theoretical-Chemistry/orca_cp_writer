@@ -95,7 +95,7 @@ def orca_cp_write(args):
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP1 = SCF_ENERGY[2] ;\n\tRead D1 = VDW_CORRECTION[2] ;\n\n")
     elif mp2_corr:
-        inp.write("\tStep_End\n\tRead SP1 = MP2_TOTAL_ENERGY[2] ;\n\n")
+        inp.write("\t\t*\n\tStep_End\n\tRead SP1 = MP2_TOTAL_ENERGY[2] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP1 = SCF_ENERGY[2] ;\n\n")
     
@@ -108,7 +108,7 @@ def orca_cp_write(args):
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP2 = SCF_ENERGY[3] ;\n\tRead D2 = VDW_CORRECTION[3] ;\n\n")
     elif mp2_corr:
-        inp.write("\tStep_End\n\tRead SP2 = MP2_TOTAL_ENERGY[3] ;\n\n")
+        inp.write("\t\t*\n\tStep_End\n\tRead SP2 = MP2_TOTAL_ENERGY[3] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP2 = SCF_ENERGY[3] ;\n\n")
     
@@ -121,7 +121,7 @@ def orca_cp_write(args):
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP3 = SCF_ENERGY[4] ;\n\tRead D3 = VDW_CORRECTION[4] ;\n\n")
     elif mp2_corr:
-        inp.write("\tStep_End\n\tRead SP3 = MP2_TOTAL_ENERGY[4] ;\n\n")
+        inp.write("\t\t*\n\tStep_End\n\tRead SP3 = MP2_TOTAL_ENERGY[4] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP3 = SCF_ENERGY[4] ;\n\n")
     
@@ -134,7 +134,7 @@ def orca_cp_write(args):
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP4 = SCF_ENERGY[5] ;\n\tRead D4 = VDW_CORRECTION[5] ;\n\n")
     elif mp2_corr:
-        inp.write("\tStep_End\n\tRead SP4 = MP2_TOTAL_ENERGY[5] ;\n\n")
+        inp.write("\t\t*\n\tStep_End\n\tRead SP4 = MP2_TOTAL_ENERGY[5] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP4 = SCF_ENERGY[5] ;\n\n")
     
