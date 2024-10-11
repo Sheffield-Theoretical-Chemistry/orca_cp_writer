@@ -14,11 +14,19 @@ def orca_cp_write(args):
     
     method_keywords = "! " + args.method_keywords + "\n"
     print("Using the method keywords:", method_keywords)
+    
     #Check if the method includes empirical dispersion, may need additional terms adding to this list
     disp_list = ['D3ZERO', 'd3zero', 'D3BJ', 'd3bj', 'D4', 'd4']
     dispersion = any(ele in method_keywords for ele in disp_list)
     if dispersion:
         print("Empirical dispersion correction detected.")
+    
+    #Catch cases where MP2 is used as the method
+    if 'mp2' in method_keywords.lower():
+        mp2_corr = True
+    else:
+        mp2_corr = False    
+    
     memory_string = "%maxcore " + memory + "\n"
     
     #Offset the split by the two compulsory lines in an xyz file
@@ -73,6 +81,8 @@ def orca_cp_write(args):
     inp.write(method_keywords)
     if dispersion:
         inp.write("\tStep_End\n\tRead DIMER = SCF_ENERGY[1] ;\n\tRead D0 = VDW_CORRECTION[1] ;\n\n")
+    elif mp2_corr:
+        inp.write("\tStep_End\n\tRead DIMER = MP2_TOTAL_ENERGY[1] ;\n\n")
     else:
         inp.write("\tStep_End\n\tRead DIMER = SCF_ENERGY[1] ;\n\n")
     
@@ -84,6 +94,8 @@ def orca_cp_write(args):
     inp.write(monomer1)
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP1 = SCF_ENERGY[2] ;\n\tRead D1 = VDW_CORRECTION[2] ;\n\n")
+    elif mp2_corr:
+        inp.write("\tStep_End\n\tRead SP1 = MP2_TOTAL_ENERGY[2] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP1 = SCF_ENERGY[2] ;\n\n")
     
@@ -95,6 +107,8 @@ def orca_cp_write(args):
     inp.write(mon1_ghost)
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP2 = SCF_ENERGY[3] ;\n\tRead D2 = VDW_CORRECTION[3] ;\n\n")
+    elif mp2_corr:
+        inp.write("\tStep_End\n\tRead SP2 = MP2_TOTAL_ENERGY[3] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP2 = SCF_ENERGY[3] ;\n\n")
     
@@ -106,6 +120,8 @@ def orca_cp_write(args):
     inp.write(monomer2)
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP3 = SCF_ENERGY[4] ;\n\tRead D3 = VDW_CORRECTION[4] ;\n\n")
+    elif mp2_corr:
+        inp.write("\tStep_End\n\tRead SP3 = MP2_TOTAL_ENERGY[4] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP3 = SCF_ENERGY[4] ;\n\n")
     
@@ -117,6 +133,8 @@ def orca_cp_write(args):
     inp.write(mon2_ghost)
     if dispersion:
         inp.write("\t\t*\n\tStep_End\n\tRead SP4 = SCF_ENERGY[5] ;\n\tRead D4 = VDW_CORRECTION[5] ;\n\n")
+    elif mp2_corr:
+        inp.write("\tStep_End\n\tRead SP4 = MP2_TOTAL_ENERGY[5] ;\n\n")
     else:
         inp.write("\t\t*\n\tStep_End\n\tRead SP4 = SCF_ENERGY[5] ;\n\n")
     
