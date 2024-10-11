@@ -141,7 +141,10 @@ def orca_cp_write(args):
     #Ask Orca to work with the variables
     if dispersion:
         inp.write("\tIE_KCALMOL = ((DIMER + D0) - (SP1 + D1 + SP3 + D3)) * 627.5096 ;\n")
-        inp.write("\tBSSE_AU = (SP1 - SP2) + (SP3 - SP4) + (D1 - D2) + (D3 - D4) ;\n")
+        if args.d4_workaround:
+            inp.write("\tBSSE_AU = (SP1 - SP2) + (SP3 - SP4) ;\n")
+        else:
+            inp.write("\tBSSE_AU = (SP1 - SP2) + (SP3 - SP4) + (D1 - D2) + (D3 - D4) ;\n")
     else:
         inp.write("\tIE_KCALMOL = ((DIMER) - (SP1 + SP3)) * 627.5096 ;\n")
         inp.write("\tBSSE_AU = (SP1 - SP2) + (SP3 - SP4) ;\n")
@@ -167,6 +170,12 @@ if __name__ == "__main__":
          "--ram",
          help="Amount of memory (maxcore), in MB, to be requested, default is 4000'",
          default="4000",
+    )
+    parser.add_argument(
+         "-d",
+         "--d4_workaround",
+         help="Applies a workaround for the D4 dispersion correction bug in Orca 5.0.4'",
+         action="store_true",
     )
 
     args = parser.parse_args()
